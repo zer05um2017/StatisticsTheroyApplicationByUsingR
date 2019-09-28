@@ -82,19 +82,50 @@ bind
 plot(bind)
 
 # 2.5
-a <- rep("0", 3)
-b <- rep("10", 5)
-c <- rep("20", 4)
-d <- rep("30", 13)
-e <- rep("40", 35)
-f <- rep("50", 55)
-g <- rep("60", 78)
-h <- rep("70", 40)
-i <- rep("80", 27)
-j <- rep("90", 10)
+a <- sample(1:9,3,replace=T)
+b <- sample(10:19,5,replace=T)
+c <- sample(20:29,4,replace=T)
+d <- sample(30:39,13,replace=T)
+e <- sample(40:49,35,replace=T)
+f <- sample(50:59,55,replace=T)
+g <- sample(60:69,78,replace=T)
+h <- sample(70:79,40,replace=T)
+i <- sample(80:89,27,replace=T)
+j <- sample(90:100,10,replace=T)
 k <- c(a,b,c,d,e,f,g,h,i,j)
-l <- as.matrix(table(k))
-total <- sum(l)
-relative_frea <- l/total
-m <- cbind(l, relative_frea)
-hist(l, breaks = 10)
+l <- as_tibble(k)
+l <- l %>% mutate(value1 = k/sum(k))
+ggplot(data = l) + geom_histogram(mapping = aes(x=value), binwidth = 10)
+
+
+# 2.6
+df <- tibble("data" = c(36,46,51,30,32,20,18,25,26,17,14,20,11,15,22,22,15,17,25,24,12,52,27,24,20,35,21,17,18,19,35,37,28,29,30,13,12,36,35,41,36,6,29,10,9,12,16,36,27,26))
+ggplot(data = df, mapping = aes(y=data)) + geom_boxplot()
+
+# 2.7
+m <- c(54,38,35,60,51,48,47,43,45,50,45,47,46,49,53,44,45,45,48,58,41,40,46,45,48,53,55,47,47,43)
+f <- c(54,55,61,68,58,59,67,78,45,43,56,56,57,55,62,64,68,65,54,50)
+boxplot(m, f, horizontal = T)
+ex_1 <- data.frame(m)
+ex_2 <- data.frame(f)
+summary(ex_1)
+summary(ex_2)
+
+# 2.8
+df <- tribble(~type, ~manual, ~auto,
+        #--|--|----
+        "A", 10, 35,
+        "B", 15, 25,
+        "C", 18, 32,
+        "D", 5, 15)
+df <- df %>% mutate(rsum = manual + auto)
+
+row <- tribble(~type,~manual, ~auto, ~rsum,
+               #--|--|---
+               "SUM", sum(df$manual), sum(df$auto), sum(df$rsum))
+
+df <- df %>% bind_rows(row)
+df
+t(df[1:5,2:4] / 155)
+
+# 2.9
