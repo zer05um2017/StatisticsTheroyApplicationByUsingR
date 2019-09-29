@@ -111,7 +111,7 @@ ex_2 <- data.frame(f)
 summary(ex_1)
 summary(ex_2)
 
-# 2.8
+# 2.9
 df <- tribble(~type, ~manual, ~auto,
         #--|--|----
         "A", 10, 35,
@@ -128,4 +128,39 @@ df <- df %>% bind_rows(row)
 df
 t(df[1:5,2:4] / 155)
 
-# 2.9
+# 2.11
+df <- tribble(~type, ~top, ~median, ~bottom,
+              #--|--|--|--
+              "A", 43, 20, 17,
+              "B", 50, 35, 15,
+              "C", 45, 40, 15,
+              "D", 25, 30, 35,
+              "E", 5,  15, 10)
+
+df <- df %>% mutate(rsum = top + median + bottom)
+
+row <- tribble(~type, ~top, ~median, ~bottom, ~rsum,
+              #--|--|--|--|--
+              "SUM", sum(df$top), sum(df$median), sum(df$bottom), sum(df$rsum))
+df <- bind_rows(df, row)
+df[1:nrow(df),2:ncol(df)]/as.numeric(df[6,5])
+
+# 2.12
+df <- tribble(~X, ~Y,
+              #--|--
+              0,4,
+              1,3,
+              6,0,
+              3,2,
+              5,1)
+
+ggplot(data = df) + geom_point(mapping = aes(x=X, y=Y))
+cor(df)
+#X          Y
+#X  1.0000000 -0.9922779
+#Y -0.9922779  1.0000000
+
+V <- 2*df$X + 3
+W <- df$Y + 1
+cor(V,W)
+#[1] -0.9922779 
